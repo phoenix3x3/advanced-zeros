@@ -1,78 +1,45 @@
 module.exports = function getZerosCount(number, base) {
-    function getBaseLog(p, n) {
-        return Math.log(n) / Math.log(p);
+
+  function compare(a, b) {
+    if (a > b) return 1;
+    if (a < b) return -1;
+  }
+  let power = [], fraction = 0, result = [], den = 0, k = 0, j = 0, final = [];
+
+  while (k <= base) {
+    result[k] = 0;
+    power[k] = 0;
+    k++;
+  }
+
+  for (let i = 2; i <= base; i++) {
+    while (base % i === 0) {
+      power[i]++;
+      base /= i;
     }
-    let arr = [];
-    let buf = base;
-    for (let i = 2; number > i; i++) {
-        if (buf % i === 0) {
-            arr.push(i);
-            buf /= i;
-            i = 1;
-        }
+  }
+  if (base != 1) {
+    power[base]++;
+  }
+  k = 1;
+  for (let i = 0; i < power.length; i++) {
+    k = 1;
+    if (power[i] !== 0) {
+      while (true) {
+        denominator = Math.pow(i, k);
+        fraction = Math.floor(number / denominator);
+        if (fraction < 1) break;
+        else result[i] += fraction;
+        k++;
+      }
     }
-    let mem;
-    let solution = 0;
-    let count;
-    arr.forEach((element,index) => {
-        mem = 0;
-        count = 1;
-        for(let j = 0; j < arr.length; j++) {
-            if (element === arr[j] && index !== j) {
-            count++;
-            }
-        }
-        for(let i = 1; i < getBaseLog(element, number); i++) {
-            mem += Math.floor(number / Math.pow(element, i));
-        }
-        Math.floor(mem /= count);
-        if(index === 0) {
-          solution = mem;
-        }
-        if (mem < solution) {
-            solution = mem;
-        }
-    });
-    return solution;
+    result[i] = Math.floor(result[i] / power[i]);
+    if (!isNaN(result[i])) {
+      final[j] = result[i];
+      j++;
+    }
+  }
+  final.sort(compare);
+  const answer = final[0];
+  return answer;
 }
- 
-   
-  
-   
-   
-//     function getBaseLog(p, n) {
-//         return Math.log(n) / Math.log(p);
-//     }
-    
-//     let arr = [];
-//     let buf = base;
-//     for (let i = 2; number > i; i++) {
-//         if (buf % i === 0) {
-//             arr.push(i);
-//             buf /= i;
-//             i = 1;
-//         }
-//     }
-//     let mem;
-//     let min = 0;
-//     let count = 1;
-//     let indexMin;
-//     arr.forEach((element, index) => {
-//         mem = 0
-//         k = getBaseLog(element, number);
-//         for(let i = 1; i < getBaseLog(element, number); i++) {
-//             mem += Math.floor(number / Math.pow(element, i));
-//         }
-//         if (mem < min) {
-//             min = mem;
-//             indexMin = index;
-//         }
-//     });
-//     for(let j of arr) {
-//         if (j === arr[indexMin]) {
-//             count++;
-//         }
-//     }
-//     return mem/count;
-    
-// }
